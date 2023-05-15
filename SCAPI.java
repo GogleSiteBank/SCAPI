@@ -1,4 +1,4 @@
-package org.instantmine.utils;
+package PACKAGEHERE;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
