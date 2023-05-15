@@ -1,7 +1,14 @@
+package org.instantmine.utils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 /*
 SCAPI by COnnOrZeUs
@@ -9,83 +16,85 @@ SCAPI by COnnOrZeUs
 
 public class SCAPI {
     ScoreboardManager mgr = Bukkit.getScoreboardManager();
-    Scoreboard scr = mgr.getNewScoreboard();
+    Scoreboard scr;
+
+    {
+        assert mgr != null;
+        scr = mgr.getNewScoreboard();
+    }
+
     Objective obj = scr.registerNewObjective("SCAPI-obj", "dummy", "SCAPI");
     Team t = scr.registerNewTeam("SCAPI-team");
-    public void setobj(Objective obj) {
+
+    public static ArrayList<UUID> array = new ArrayList<>();
+
+    public void setScoreObjective(Objective obj) {
         this.obj = obj;
     }
 
-    public boolean checkplr(Player plr) {
-        if (t.hasEntry(plr.getName())) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean checkPlayer(Player plr) {
+        return array.contains(plr.getUniqueId());
     }
 
-    public boolean addplr(Player plr) {
-        if (!t.hasEntry(plr.getName())) {
-            t.addEntry(plr.getName());
-            return true;
-        } else {
-            return false;
-        }
+
+    public void addPlayer(Player plr) {
+        t.addEntry(plr.getName());
+        array.add(plr.getUniqueId());
     }
 
-    public boolean removeplr(Player plr) {
-        if (t.hasEntry(plr.getName())) {
-            t.removeEntry(plr.getName());
-            return true;
-        } else {
-            return false;
-        }
+    public void removePlayer(Player plr) {
+        t.removeEntry(plr.getName());
+        array.remove(plr.getUniqueId());
     }
 
-    public boolean setglobalprefix(String prefix) {
+
+    public void setGlobalPrefix(String prefix) {
         t.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
-        return true;
     }
 
-    public boolean setdisplay(String display) {
+    public void setDisplay(String display) {
         t.setPrefix(ChatColor.translateAlternateColorCodes('&', display));
-        return true;
     }
 
-    public boolean InvisibleSee(boolean cansee) {
+    public void invisibleSee(boolean cansee) {
         t.setCanSeeFriendlyInvisibles(cansee);
-        return true;
     }
 
-    public boolean friendlyfire(boolean allow) {
+    public void friendlyFire(boolean allow) {
         t.setAllowFriendlyFire(allow);
-        return true;
     }
 
-    public boolean settitle(String title) {
+    public void setTitle(String title) {
         obj.setDisplayName(ChatColor.translateAlternateColorCodes('&', title));
-        return true;
     }
 
-    public boolean setdisplayslot(DisplaySlot slot) {
+    public void setDisplaySlot(DisplaySlot slot) {
         obj.setDisplaySlot(slot);
-        return true;
     }
 
-    public boolean createscore(String name, int l) {
-        Score scr = obj.getScore(ChatColor.translateAlternateColorCodes('&', name));
+    public void createScore(String name, int l) {
+        Score scr = obj.getScore(ChatColor.translateAlternateColorCodes('&', name));;
         scr.setScore(l);
-        return true;
     }
 
+    public void removeScore(String name) {
+        scr.resetScores(name);
+    }
 
-    public boolean updatescoreboard(Player plr) {
+    public Set<String> getEntries() {
+        return scr.getEntries();
+    }
+
+    public void resetEntries(String entry) {
+        scr.resetScores(entry);
+    }
+
+    public void updateScoreboard(Player plr) {
         plr.setScoreboard(scr);
-        return true;
     }
 
-    public boolean removescoreboard(Player plr) {
-        plr.setScoreboard(mgr.getNewScoreboard());
-        return true;
+    public void removeScoreboard(Player plr) {
+        plr.setScoreboard(Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard());
     }
+
 }
