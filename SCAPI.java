@@ -52,10 +52,6 @@ public class SCAPI {
         t.setPrefix(ChatColor.translateAlternateColorCodes('&', prefix));
     }
 
-    public void setDisplay(String display) {
-        t.setPrefix(ChatColor.translateAlternateColorCodes('&', display));
-    }
-
     public void invisibleSee(boolean cansee) {
         t.setCanSeeFriendlyInvisibles(cansee);
     }
